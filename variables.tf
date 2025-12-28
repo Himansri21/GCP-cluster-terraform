@@ -36,3 +36,27 @@ variable "machine_type" {
   type        = string
   default     = "e2-medium"    # 2 vCPU, 4GB RAM - cost effective
 }
+
+variable "website_repo_url" {
+  description = "Git repository URL for your website application"
+  type        = string
+  default     = "https://github.com/Himansri21/your-website-repo"  # Replace with actual repo
+}
+
+variable "website_repo_path" {
+  description = "Path within the website repo where K8s manifests are located"
+  type        = string
+  default     = "k8s"  # or "manifests" or "helm-chart" - wherever your K8s files are
+}
+
+variable "website_namespace" {
+  description = "Kubernetes namespace for website deployment"
+  type        = string
+  default     = "website"
+}
+
+variable "enable_argocd" {
+  description = "Enable ArgoCD deployment"
+  type        = bool
+  default     = true
+}
