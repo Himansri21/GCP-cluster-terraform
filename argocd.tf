@@ -81,7 +81,9 @@ resource "helm_release" "argocd" {
 resource "kubectl_manifest" "root_app_of_apps" {
   count = var.enable_argocd ? 1 : 0
 
-  yaml_body = file("${path.module}/../argocd-apps/root-app.yaml")
+  yaml_body = templatefile("${path.module}/../argocd-apps/root-app.yaml", {
+    argocd_apps_repo = "https://github.com/Himansri21/Argocd-Gitops"
+  })
 
   depends_on = [helm_release.argocd]
 }
