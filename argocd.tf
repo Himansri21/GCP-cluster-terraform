@@ -1,6 +1,5 @@
 # argocd.tf
 
-# Create ArgoCD namespace
 resource "kubernetes_namespace" "argocd" {
   count = var.enable_argocd ? 1 : 0
 
@@ -11,7 +10,6 @@ resource "kubernetes_namespace" "argocd" {
   depends_on = [google_container_cluster.primary]
 }
 
-# Deploy ArgoCD using Helm
 resource "helm_release" "argocd" {
   count = var.enable_argocd ? 1 : 0
 
@@ -23,11 +21,58 @@ resource "helm_release" "argocd" {
 
   values = [
     <<-EOT
+    global:
+      # Minimal resources for small cluster
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
+
     server:
       service:
         type: LoadBalancer
       extraArgs:
         - --insecure
+      replicas: 1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+    controller:
+      replicas: 1
+      resources:
+        limits:
+          cpu: 250m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+    repoServer:
+      replicas: 1
+      resources:
+        limits:
+          cpu: 200m
+          memory: 256Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+
+    redis:
+      resources:
+        limits:
+          cpu: 100m
+          memory: 128Mi
+        requests:
+          cpu: 50m
+          memory: 64Mi
 
     configs:
       params:
@@ -38,38 +83,21 @@ resource "helm_release" "argocd" {
           type: git
         - url: ${var.website_repo_url}
           type: git
-    
-    controller:
-      resources:
-        limits:
-          cpu: 1000m
-          memory: 1Gi
-        requests:
-          cpu: 500m
-          memory: 512Mi
-    
-    server:
-      resources:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 250m
-          memory: 256Mi
-    
-    repoServer:
-      resources:
-        limits:
-          cpu: 500m
-          memory: 512Mi
-        requests:
-          cpu: 250m
-          memory: 256Mi
+
+    # Disable heavy components
+    dex:
+      enabled: false
+
+    notifications:
+      enabled: false
+
+    applicationSet:
+      enabled: false
     EOT
   ]
 
-  wait    = true
-  timeout = 600
+  wait    = false  # Don't wait - let it deploy in background
+  timeout = 900
 
   depends_on = [
     google_container_cluster.primary,
@@ -77,18 +105,14 @@ resource "helm_release" "argocd" {
   ]
 }
 
-# Deploy Root App of Apps
 resource "kubectl_manifest" "root_app_of_apps" {
   count = var.enable_argocd ? 1 : 0
 
-  yaml_body = templatefile("${path.module}/../argocd-apps/root-app.yaml", {
-    argocd_apps_repo = "https://github.com/Himansri21/Argocd-Gitops"
-  })
+  yaml_body = file("${path.module}/../Argocd-apps/root-app.yaml")
 
   depends_on = [helm_release.argocd]
 }
 
-# Get ArgoCD admin password
 data "kubernetes_secret" "argocd_admin_password" {
   count = var.enable_argocd ? 1 : 0
 

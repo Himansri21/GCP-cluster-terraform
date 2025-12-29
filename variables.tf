@@ -34,7 +34,7 @@ variable "node_count" {
 variable "machine_type" {
   description = "Machine type for nodes"
   type        = string
-  default     = "e2-medium"    # 2 vCPU, 4GB RAM - cost effective
+  default     = "e2-standard-2"    # 2 vCPU, 4GB RAM - cost effective
 }
 
 variable "website_repo_url" {
