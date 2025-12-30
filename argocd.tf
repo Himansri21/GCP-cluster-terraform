@@ -18,6 +18,7 @@ resource "helm_release" "argocd" {
   chart      = "argo-cd"
   version    = "7.7.11"
   namespace  = kubernetes_namespace.argocd[0].metadata[0].name
+  skip_crds = false
 
   values = [
     <<-EOT
@@ -105,13 +106,13 @@ resource "helm_release" "argocd" {
   ]
 }
 
-resource "kubectl_manifest" "root_app_of_apps" {
-  count = var.enable_argocd ? 1 : 0
+#resource "kubectl_manifest" "root_app_of_apps" {
+ # count = var.enable_argocd ? 1 : 0
 
-  yaml_body = file("${path.module}/../Argocd-apps/root-app.yaml")
+  #yaml_body = file("${path.module}/../Argocd-apps/root-app.yaml")
 
-  depends_on = [helm_release.argocd]
-}
+  #depends_on = [helm_release.argocd]
+#}
 
 data "kubernetes_secret" "argocd_admin_password" {
   count = var.enable_argocd ? 1 : 0
