@@ -50,10 +50,10 @@ resource "helm_release" "argocd" {
       resources:
         limits:
           cpu: 250m
-          memory: 256Mi
+          memory: 512Mi
         requests:
           cpu: 100m
-          memory: 128Mi
+          memory: 256Mi
 
     repoServer:
       replicas: 1
