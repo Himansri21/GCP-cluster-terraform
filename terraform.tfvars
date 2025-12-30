@@ -6,7 +6,7 @@ region       = "asia-south1"
 zone         = "asia-south1-a"
 cluster_name = "my-gke-cluster"
 node_count   = 2
-machine_type = "e2-medium"
+machine_type = "e2-standard-2"
 
 enable_argocd       = true
 website_repo_url    = "https://github.com/Himansri21/your-website-repo"  # Replace with your actual website repo
