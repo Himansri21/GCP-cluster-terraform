@@ -27,11 +27,6 @@ output "kubectl_connect_command" {
   value       = "gcloud container clusters get-credentials ${google_container_cluster.primary.name} --zone ${var.zone} --project ${var.project_id}"
 }
 
-output "website_load_balancer_ip" {
-  description = "Website LoadBalancer IP"
-  value       = kubernetes_service.website.status[0].load_balancer[0].ingress[0].ip
-}
-
 # ===== NEW: ArgoCD OUTPUTS =====
 output "argocd_admin_password" {
   description = "ArgoCD admin password"
