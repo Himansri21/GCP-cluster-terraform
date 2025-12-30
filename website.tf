@@ -1,4 +1,4 @@
-resource "kubernetes_deployment" "website"{
+# 'resource "kubernetes_deployment" "website"{
     metadata{
         name = "website"
         namespace = kubernetes_namespace.nginx.metadata[0].name
@@ -53,7 +53,7 @@ resource "kubernetes_deployment" "website"{
   }
 }
 
-resource "kubernetes_service" "website"{
+# resource "kubernetes_service" "website"{
     metadata{
         name = "website-service"
         namespace = "nginx"
@@ -75,4 +75,4 @@ resource "kubernetes_service" "website"{
 
         type = "LoadBalancer"
     }
-}
+}'
