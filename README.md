@@ -401,10 +401,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👤 Author
 
-**Himanshu Rajput**
+**Himanshu Srivastava**
 - GitHub: [@Himansri21](https://github.com/Himansri21)
-- LinkedIn: [Himanshu Rajput](https://www.linkedin.com/in/himansri21/)
-- Medium: [@himanshurajput21](https://medium.com/@himanshurajput21)
+- LinkedIn: [Himanshu Srivastava](https://www.linkedin.com/in/himansri21/)
+- Medium: [@himanshuSrivastava21]([https://medium.com/@himansrivastava2003])
 
 ## ⭐ Show your support
 
